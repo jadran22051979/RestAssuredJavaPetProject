@@ -1,12 +1,12 @@
 package tests;
 
 import content.PetContent;
+import enums.PetStatus;
 import io.qameta.allure.Description;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
 import models.Pet;
-import models.PetNegative;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
@@ -19,7 +19,7 @@ import static io.restassured.config.LogConfig.logConfig;
 
 public class NegativePetTests extends BaseTests{
     public static RequestSpecification requestNegative;
-    private static  Pet petDtoNegative = PetPayload.petDtoNegative();
+    private static final Pet petDtoNegative = PetPayload.petDto(PetStatus.negative);
     @BeforeEach
     void setRequest() {
         requestNegative = given().config(RestAssured.config().logConfig(logConfig().enableLoggingOfRequestAndResponseIfValidationFails()))
@@ -50,19 +50,18 @@ public class NegativePetTests extends BaseTests{
 
     @Test
     @Order(2)
-    @DisplayName("Add new pet")
-    @Description("Adding new Pet and check of response status code and body")
-    public void postAddNewPetNegative_200() {
+    @DisplayName("Update Pet-Negative Test")
+    @Description("Update Pet if resource is not found with PUT method")
+    public void updatePet() {
+        //Behaviour is same as on https://petstore.swagger.io/
         requestNegative
                 .body(petDtoNegative)
                 .when()
-                .post("/pet/")
+                .put("/pet/")
                 .then()
-                .statusCode(PetContent.STATUS_CODE_404)
-                .log().all()
+                .assertThat().statusCode(200)
                 .header(PetContent.HEADER_CONTENT_TYPE, PetContent.HEADER_JSON)
-                .header(PetContent.HEADER_ALLOW_METHODS,PetContent.HEADER_ALLOW_METHODS_TYPES);
-
+                .log().all();
 
 
     }

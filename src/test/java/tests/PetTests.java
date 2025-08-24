@@ -34,7 +34,7 @@ public class PetTests extends BaseTests {
 
 
     @AfterAll
-    //Delete created Pet from Test (Good practice)
+    //Delete created Pet from Test (Good practice).Problems also on https://petstore.swagger.io/ sometimes
     @DisplayName("Delete pet")
     public static void deletePet() {
         logger.debug("Started");
@@ -51,7 +51,6 @@ public class PetTests extends BaseTests {
 
     @BeforeEach
     void setRequest() {
-        logger.debug("Setting request");
         request = given().config(RestAssured.config().logConfig(logConfig().enableLoggingOfRequestAndResponseIfValidationFails()))
                 .header(PetContent.API_KEY, PetContent.API_KEY_VALUE)
                 .contentType(ContentType.JSON);
@@ -83,48 +82,34 @@ public class PetTests extends BaseTests {
 
 
     }
-  /*  @Test
-    @Order(2)
-    @DisplayName("Add new pet Negative")
-    @Description("Adding new Pet and check of response status code and body")
-    public void postAddNewPetNegative_200() {
-        request
-                .body(petDto)
-                .when()
-                .post("/pet/")
-                .then()
-                .statusCode(PetContent.STATUS_CODE_200)
-                .log().all()
-                .header(PetContent.HEADER_CONTENT_TYPE, PetContent.HEADER_JSON)
-                .header(PetContent.HEADER_ALLOW_METHODS, PetContent.HEADER_ALLOW_METHODS_TYPES);
-
-
-
-    }*/
-
 
     @Test
-    @Order(3)
+    @Order(2)
+    @DisplayName("Update pet")
     public void updatePet() {
-
-
         request
                 .body(petDto)
                 .when()
                 .put("/pet/")
                 .then()
                 .assertThat().statusCode(200)
-                .and().assertThat().body("id", equalTo(petDto.getId()))
+                .header(PetContent.HEADER_CONTENT_TYPE, PetContent.HEADER_JSON)
+                .body(PetContent.BODY_ID, equalTo(petDto.getId()),
+                        PetContent.BODY_CATEGORY_ID, equalTo(petDto.getCategory().getId()),
+                        PetContent.BODY_CATEGORY_NAME, equalTo(petDto.getCategory().getName()),
+                        PetContent.BODY_NAME, equalTo(petDto.getName()),
+                        PetContent.BODY_STATUS, equalTo(PetContent.STATUS_AVAILABLE))
                 .log().all();
 
 
     }
 
     @Test
-    @Order(4)
+    @Order(3)
     @DisplayName("Get Pet by ID")
     @Description("Get Pet by ID created before in Test")
     public void findPet_ByID() {
+        //Problems found here when try to GET by ID also on https://petstore.swagger.io/ .Probably server issue (Flaky)
         request
                 .param("petId", petDtoId)
                 .log().all()

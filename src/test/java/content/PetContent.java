@@ -13,8 +13,7 @@ public class PetContent {
 
     //Status
     public static final String STATUS_AVAILABLE="available";
-    public static final String STATUS_PENDING="pending";
-    public static final String STATUS_SOLD="sold";
+
     //Status code
     public static final int STATUS_CODE_200= 200;
     public static final int STATUS_CODE_404= 404;

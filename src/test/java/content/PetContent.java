@@ -10,6 +10,7 @@ public class PetContent {
     public static final String BODY_CATEGORY_NAME ="category.name";
     public static final String BODY_NAME ="name";
     public static final String BODY_STATUS ="status";
+    public static final String BODY_CHANGED_NAME ="Changed name";
 
     //Status
     public static final String STATUS_AVAILABLE="available";

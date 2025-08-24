@@ -29,7 +29,6 @@ public class PetTests extends BaseTests {
 
     public static RequestSpecification request;
     private static final Pet petDto = PetPayload.petDto(PetStatus.available);
-
     static Integer petDtoId = petDto.getId();
 
 
@@ -64,7 +63,6 @@ public class PetTests extends BaseTests {
     @DisplayName("Add new pet")
     @Description("Adding new Pet and check of response status code and body")
     public void postAddNewPet_200() {
-        logger.debug("Starting test for ADD NEW PET");
         request
                 .body(petDto)
                 .when()
@@ -87,6 +85,8 @@ public class PetTests extends BaseTests {
     @Order(2)
     @DisplayName("Update pet")
     public void updatePet() {
+        //Change name in Fake data
+        petDto.setName(PetContent.BODY_CHANGED_NAME);
         request
                 .body(petDto)
                 .when()
@@ -107,7 +107,7 @@ public class PetTests extends BaseTests {
     @Test
     @Order(3)
     @DisplayName("Get Pet by ID")
-    @Description("Get Pet by ID created before in Test")
+    @Description("Get Pet by ID created before in Test wth changed name")
     public void findPet_ByID() {
         //Problems found here when try to GET by ID also on https://petstore.swagger.io/ .Probably server issue (Flaky)
         request

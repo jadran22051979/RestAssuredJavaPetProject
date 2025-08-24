@@ -2,6 +2,7 @@ package tests;
 
 import content.PetContent;
 import enums.PetStatus;
+import io.github.cdimascio.dotenv.Dotenv;
 import io.qameta.allure.Description;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -18,12 +19,15 @@ import static io.restassured.config.LogConfig.logConfig;
 
 
 public class NegativePetTests extends BaseTests{
+    Dotenv dotenv = Dotenv.load();
+    String apiKey = dotenv.get("API_KEY");
+    String apiKeyValue = dotenv.get("API_KEY_VALUE");
     public static RequestSpecification requestNegative;
     private static final Pet petDtoNegative = PetPayload.petDto(PetStatus.negative);
     @BeforeEach
     void setRequest() {
         requestNegative = given().config(RestAssured.config().logConfig(logConfig().enableLoggingOfRequestAndResponseIfValidationFails()))
-                .header(PetContent.API_KEY, PetContent.API_KEY_VALUE)
+                .header(apiKey, apiKeyValue)
                 .contentType(ContentType.JSON);
 
 
@@ -52,7 +56,7 @@ public class NegativePetTests extends BaseTests{
     @Order(2)
     @DisplayName("Update Pet-Negative Test")
     @Description("Update Pet if resource is not found with PUT method")
-    public void updatePet() {
+    public void updatePetNegative() {
         //Behaviour is same as on https://petstore.swagger.io/
         requestNegative
                 .body(petDtoNegative)
@@ -65,5 +69,23 @@ public class NegativePetTests extends BaseTests{
 
 
     }
+
+    /*@Test
+    @Order(3)
+    @DisplayName("Post Pet-Negative Test")
+    @Description("")
+    public void postPetNegative() {
+        petDtoNegative.setId();
+        requestNegative
+                .body(petDtoNegative)
+                .when()
+                .post("/pet/")
+                .then()
+                .assertThat().statusCode(200)
+                .header(PetContent.HEADER_CONTENT_TYPE, PetContent.HEADER_JSON)
+                .log().all();
+
+
+    }*/
 
 }

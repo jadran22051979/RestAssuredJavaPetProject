@@ -1,9 +1,6 @@
 package content;
 
 public class PetContent {
-    //Authorization
-    public static final String API_KEY="api-key";
-    public static final String API_KEY_VALUE="testApiKey";
     //Body
     public static final String BODY_ID="id";
     public static final String BODY_CATEGORY_ID ="category.id";

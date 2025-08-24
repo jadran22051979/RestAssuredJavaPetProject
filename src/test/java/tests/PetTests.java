@@ -2,6 +2,7 @@ package tests;
 
 import content.PetContent;
 import enums.PetStatus;
+import io.github.cdimascio.dotenv.Dotenv;
 import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
@@ -24,6 +25,10 @@ import static org.hamcrest.Matchers.equalTo;
 @Feature("Pet tests")
 @Epic("Pets Controller")
 public class PetTests extends BaseTests {
+    Dotenv dotenv = Dotenv.load();
+    String apiKey = dotenv.get("API_KEY");
+    String apiKeyValue = dotenv.get("API_KEY_VALUE");
+
 
     private static final Logger logger = LogManager.getLogger(PetTests.class);
 
@@ -36,7 +41,7 @@ public class PetTests extends BaseTests {
     //Delete created Pet from Test (Good practice).Problems also on https://petstore.swagger.io/ sometimes
     @DisplayName("Delete pet")
     public static void deletePet() {
-        logger.debug("Started");
+        logger.debug("Deleting Pet created in Test");
         request
                 .param("petId", petDtoId)
                 .when()
@@ -51,7 +56,7 @@ public class PetTests extends BaseTests {
     @BeforeEach
     void setRequest() {
         request = given().config(RestAssured.config().logConfig(logConfig().enableLoggingOfRequestAndResponseIfValidationFails()))
-                .header(PetContent.API_KEY, PetContent.API_KEY_VALUE)
+                .header(apiKey, apiKeyValue)
                 .contentType(ContentType.JSON);
 
 

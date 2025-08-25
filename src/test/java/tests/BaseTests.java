@@ -2,7 +2,6 @@ package tests;
 
 import lombok.NoArgsConstructor;
 
-
 import static io.restassured.RestAssured.baseURI;
 
 @NoArgsConstructor

@@ -18,12 +18,16 @@ import static io.restassured.RestAssured.given;
 import static io.restassured.config.LogConfig.logConfig;
 
 
-public class NegativePetTests extends BaseTests{
+public class NegativePetTests extends BaseTests {
+    //Get from env variables API_KEY
     Dotenv dotenv = Dotenv.load();
     String apiKey = dotenv.get("API_KEY");
     String apiKeyValue = dotenv.get("API_KEY_VALUE");
+
     public static RequestSpecification requestNegative;
     private static final Pet petDtoNegative = PetPayload.petDto(PetStatus.negative);
+
+
     @BeforeEach
     void setRequest() {
         requestNegative = given().config(RestAssured.config().logConfig(logConfig().enableLoggingOfRequestAndResponseIfValidationFails()))
@@ -45,7 +49,7 @@ public class NegativePetTests extends BaseTests{
                 .get("/pet/" + PetContent.petDtoNegativeId)
                 .then()
                 .header(PetContent.HEADER_CONTENT_TYPE, PetContent.HEADER_JSON)
-                .header(PetContent.HEADER_ALLOW_METHODS,PetContent.HEADER_ALLOW_METHODS_TYPES)
+                .header(PetContent.HEADER_ALLOW_METHODS, PetContent.HEADER_ALLOW_METHODS_TYPES)
                 .statusCode(PetContent.STATUS_CODE_404)
                 .log().all();
 
@@ -70,22 +74,5 @@ public class NegativePetTests extends BaseTests{
 
     }
 
-    /*@Test
-    @Order(3)
-    @DisplayName("Post Pet-Negative Test")
-    @Description("")
-    public void postPetNegative() {
-        petDtoNegative.setId();
-        requestNegative
-                .body(petDtoNegative)
-                .when()
-                .post("/pet/")
-                .then()
-                .assertThat().statusCode(200)
-                .header(PetContent.HEADER_CONTENT_TYPE, PetContent.HEADER_JSON)
-                .log().all();
-
-
-    }*/
 
 }

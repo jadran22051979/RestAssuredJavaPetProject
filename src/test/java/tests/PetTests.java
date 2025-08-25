@@ -25,6 +25,7 @@ import static org.hamcrest.Matchers.equalTo;
 @Feature("Pet tests")
 @Epic("Pets Controller")
 public class PetTests extends BaseTests {
+    //Get from env variables API_KEY
     Dotenv dotenv = Dotenv.load();
     String apiKey = dotenv.get("API_KEY");
     String apiKeyValue = dotenv.get("API_KEY_VALUE");
@@ -55,6 +56,7 @@ public class PetTests extends BaseTests {
 
     @BeforeEach
     void setRequest() {
+        //Set API key in header
         request = given().config(RestAssured.config().logConfig(logConfig().enableLoggingOfRequestAndResponseIfValidationFails()))
                 .header(apiKey, apiKeyValue)
                 .contentType(ContentType.JSON);
@@ -97,7 +99,7 @@ public class PetTests extends BaseTests {
                 .when()
                 .put("/pet/")
                 .then()
-                .assertThat().statusCode(200)
+                .assertThat().statusCode(PetContent.STATUS_CODE_200)
                 .header(PetContent.HEADER_CONTENT_TYPE, PetContent.HEADER_JSON)
                 .body(PetContent.BODY_ID, equalTo(petDto.getId()),
                         PetContent.BODY_CATEGORY_ID, equalTo(petDto.getCategory().getId()),
@@ -114,7 +116,7 @@ public class PetTests extends BaseTests {
     @DisplayName("Get Pet by ID")
     @Description("Get Pet by ID created before in Test wth changed name")
     public void findPet_ByID() {
-        //Problems found here when try to GET by ID also on https://petstore.swagger.io/ .Probably server issue (Flaky)
+        //Problems found here when try to GET by ID also on https://petstore.swagger.io/ .Probably server issue
         request
                 .param("petId", petDtoId)
                 .log().all()
